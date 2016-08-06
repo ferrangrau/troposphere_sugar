@@ -70,14 +70,15 @@ class Runner(object):
     def wait(self):
         stack_status = ""
         count = 0
-        while stack_status not in ["UPDATE_COMPLETE", "CREATE_COMPLETE"] and count < 10:
+        count_max_number = 20
+        while stack_status not in ["UPDATE_COMPLETE", "CREATE_COMPLETE"] and count < count_max_number:
             count += 1
             print(".", end="")
             sys.stdout.flush()
             time.sleep(5)
             stacks = self.client.describe_stacks(StackName=self.stack_name)
             stack_status = stacks["Stacks"][0]["StackStatus"]
-        if count == 20:
+        if count == count_max_number:
             print("\nError: {0}".format(stack_status))
             return
         print("\nSuccess: {0}".format(stack_status))
